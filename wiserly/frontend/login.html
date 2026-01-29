@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WISeRly Login - AI Medical Audit Platform</title>
+    <link rel="stylesheet" href="theme.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--color-charcoal) 0%, var(--color-gray-secondary) 100%);
+        }
+        
+        .login-card {
+            background-color: var(--color-gray-secondary);
+            border: 1px solid var(--color-gray-tertiary);
+            border-radius: 12px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .login-header h1 {
+            font-size: 2rem;
+            color: var(--color-mint);
+            margin: 0 0 0.5rem 0;
+            font-family: var(--font-heading);
+        }
+        
+        .login-header p {
+            color: var(--color-text);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--color-text);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--color-charcoal);
+            border: 1px solid var(--color-gray-tertiary);
+            border-radius: 6px;
+            color: var(--color-off-white);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--color-mint);
+            box-shadow: 0 0 12px rgba(168, 230, 207, 0.3);
+        }
+        
+        .form-group input::placeholder {
+            color: var(--color-gray-tertiary);
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 0.875rem;
+            background-color: var(--color-mint);
+            color: var(--color-charcoal);
+            border: none;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            font-family: var(--font-body);
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+        
+        .login-btn:hover {
+            box-shadow: 0 0 20px rgba(168, 230, 207, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .login-btn:active {
+            transform: translateY(0);
+        }
+        
+        .error-message {
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid #EF4444;
+            color: #FECACA;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+        
+        .success-message {
+            background-color: rgba(74, 222, 128, 0.1);
+            border: 1px solid #4ADE80;
+            color: #86EFAC;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
+        .success-message.show {
+            display: block;
+        }
+        
+        .forgot-password {
+            text-align: right;
+            margin-top: 1rem;
+        }
+        
+        .forgot-password a {
+            color: var(--color-mint);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+        
+        .credentials-info {
+            background-color: var(--color-charcoal);
+            border: 1px solid var(--color-mint);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+        
+        .credentials-info strong {
+            color: var(--color-mint);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 1.5rem;
+            }
+            
+            .login-header h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>✨ WISeRly</h1>
+                <p>Medical Compliance Platform</p>
+            </div>
+            
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage"></div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        placeholder="Enter username"
+                        autocomplete="username"
+                        required
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="Enter password"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+                
+                <button type="submit" class="login-btn">Login</button>
+                
+                <div class="forgot-password">
+                    <a href="#reset">Forgot password?</a>
+                </div>
+            </form>
+            
+            <div class="credentials-info">
+                <strong>Demo Credentials:</strong>
+                Username: <code style="color: var(--color-mint);">admin</code><br>
+                Password: <code style="color: var(--color-mint);">Qly$012026</code>
+            </div>
+        </div>
+    </div>
+
+    // localStorage key for session
+const SESSION_KEY = "wiserly_user_session";
+const form = document.getElementById("loginForm");
+const errorMessage = document.getElementById("errorMessage");
+const successMessage = document.getElementById("successMessage");
+
+// Backend API URL (set in .env.local, fallback to Railway demo URL)
+const API_URL = "https://nodejs-production-492f2.up.railway.app";
+
+// Check if already logged in
+window.addEventListener("load", function() {
+    const session = localStorage.getItem(SESSION_KEY);
+    if (session) {
+        redirectToDashboard();
+    }
+});
+
+form.addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value;
+    // Clear messages
+    errorMessage.classList.remove("show");
+    successMessage.classList.remove("show");
+
+    // Send login request to backend
+    try {
+        const response = await fetch(`${API_URL}/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ username, password })
+        });
+        const result = await response.json();
+        if (response.ok && result.success) {
+            successMessage.textContent = "✅ Login successful! Redirecting...";
+            successMessage.classList.add("show");
+            // Store session
+            localStorage.setItem(SESSION_KEY, JSON.stringify(result.session));
+            setTimeout(redirectToDashboard, 1000);
+        } else {
+            errorMessage.textContent = result.message || "❌ Invalid username or password. Please try again.";
+            errorMessage.classList.add("show");
+            document.getElementById("password").value = "";
+            document.getElementById("password").focus();
+        }
+    } catch (err) {
+        errorMessage.textContent = "❌ Error connecting to backend. Please try again later.";
+        errorMessage.classList.add("show");
+    }
+});
+
+function redirectToDashboard() {
+    window.location.href = "dashboard.html";
+}
+
+// Log to console for debugging
+console.log("🔐 WISeRly Login Page");
+console.log("Backend API: " + API_URL);
+</body>
+</html>
