@@ -1,4 +1,4 @@
-import PyMuPDF  # for PDF processing
+import fitz as PyMuPDF  # for PDF processing
 
 class AskVault:
     def __init__(self):
