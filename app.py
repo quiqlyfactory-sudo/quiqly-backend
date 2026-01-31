@@ -70,5 +70,60 @@ def dashboard():
 def index():
     return "Quiqly API is running."
 
+
+# --- RL Agent Integration ---
+from stable_baselines3 import PPO
+import torch
+import threading
+
+# In-memory storage for agents (for demo; use DB for production)
+umbrella_agent = None
+user_agents = {}
+
+def get_env():
+    # Simple dummy environment for demo (CartPole)
+    from stable_baselines3.common.env_util import make_vec_env
+    return make_vec_env("CartPole-v1", n_envs=1)
+
+def get_umbrella_agent():
+    global umbrella_agent
+    if umbrella_agent is None:
+        umbrella_agent = PPO("MlpPolicy", get_env(), verbose=0)
+    return umbrella_agent
+
+@app.route("/rl/train/umbrella", methods=["POST"])
+def train_umbrella_agent():
+    agent = get_umbrella_agent()
+    def train():
+        agent.learn(total_timesteps=1000)
+    threading.Thread(target=train).start()
+    return jsonify({"status": "training started (umbrella agent)"})
+
+@app.route("/rl/predict/umbrella", methods=["POST"])
+def predict_umbrella_agent():
+    agent = get_umbrella_agent()
+    obs = get_env().reset()
+    action, _ = agent.predict(obs, deterministic=True)
+    return jsonify({"action": int(action[0])})
+
+@app.route("/rl/train/user/<user>/<business>", methods=["POST"])
+def train_user_agent(user, business):
+    key = f"{user}:{business}"
+    if key not in user_agents:
+        user_agents[key] = PPO("MlpPolicy", get_env(), verbose=0)
+    def train():
+        user_agents[key].learn(total_timesteps=1000)
+    threading.Thread(target=train).start()
+    return jsonify({"status": f"training started for {user}/{business}"})
+
+@app.route("/rl/predict/user/<user>/<business>", methods=["POST"])
+def predict_user_agent(user, business):
+    key = f"{user}:{business}"
+    if key not in user_agents:
+        return jsonify({"error": "No agent found for this user/business."}), 404
+    obs = get_env().reset()
+    action, _ = user_agents[key].predict(obs, deterministic=True)
+    return jsonify({"action": int(action[0])})
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))

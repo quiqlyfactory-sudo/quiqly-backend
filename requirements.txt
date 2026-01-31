@@ -1,4 +1,5 @@
 flask
 requests
 gunicorn
-# force rebuid
+stable-baselines3
+torch
