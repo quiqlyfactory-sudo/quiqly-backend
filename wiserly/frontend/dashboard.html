@@ -234,6 +234,8 @@
                 <button class="action-btn" onclick="alert('Export reports feature coming soon')">📥 Export Report</button>
                 <button class="action-btn" onclick="alert('Settings feature coming soon')">⚙️ Settings</button>
                 <button class="action-btn" onclick="alert('API docs coming soon')">📚 API Docs</button>
+                    <button class="action-btn" onclick="trainUmbrellaAgent()">🤖 Train Umbrella RL Agent</button>
+                    <button class="action-btn" onclick="predictUmbrellaAgent()">🔮 Predict (Umbrella RL Agent)</button>
             </div>
         </div>
         
@@ -248,7 +250,7 @@
     
     <script>
     const SESSION_KEY = "wiserly_user_session";
-    const API_URL = "https://nodejs-production-492f2.up.railway.app";
+        const API_URL = "https://quiqly-backend.onrender.com";
 
     // Check authentication and fetch dashboard data
     window.addEventListener("load", async function() {
@@ -315,6 +317,25 @@
     function logout() {
         localStorage.removeItem(SESSION_KEY);
         window.location.href = "login.html";
+    }
+    // RL Agent Demo Functions
+    async function trainUmbrellaAgent() {
+        try {
+            const res = await fetch(`${API_URL}/rl/train/umbrella`, { method: "POST" });
+            const data = await res.json();
+            alert(data.status || "Training started");
+        } catch (err) {
+            alert("Error starting RL agent training.");
+        }
+    }
+    async function predictUmbrellaAgent() {
+        try {
+            const res = await fetch(`${API_URL}/rl/predict/umbrella`, { method: "POST" });
+            const data = await res.json();
+            alert("Umbrella RL Agent action: " + (data.action ?? "N/A"));
+        } catch (err) {
+            alert("Error predicting with RL agent.");
+        }
     }
     </script>
 </body>
